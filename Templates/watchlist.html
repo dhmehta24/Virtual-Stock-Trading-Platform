@@ -1,0 +1,98 @@
+{% extends "Dashboard.html" %}
+{% block content %}
+
+    <div class="mt-5 mx-4">
+            <form method="POST" action="{% url 'search_stocks' %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" placeholder="Search Stocks" id="tags" name = "keyword">
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control" name="market">
+                            <option selected>NSE</option>
+                            <option>BSE</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type = "submit" class = "btn btn-success btn-block" value = "Search">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    {% block watchlist %}
+    <div class="card border-left-primary neumorph mt-5 mx-4">
+        <div class="card-header">
+            <h6 class="text-secondary">Current Watchlist</h6>
+        </div>
+        <div class="card-body">
+            <!--<h6 class= "text-secondary">Transactions</h6>-->
+            <div class="card border-1">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Stock Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Rate</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in stocks %}
+                        <tr style="height: 75px;" class="justify-content-center">
+                            <th scope="row"><p class="mt-3">{{ forloop.counter }}</p></th>
+                            <td><p class="mt-3"><a href="{{ i.get_absolute_url }}">{{ i.stock.company_ticker }}</a></p></td>
+                            <td><p class="mt-3 text-success">{{ i.stock.price }}</p></td>
+                            <td><p class="mt-3 text-success">{{ i.stock.change_percentage }}</p></td>
+                        </tr>
+                        {% endfor %}
+                        <!--<tr style="height: 75px;">
+                            <th scope="row"><p class="mt-3">2</p></th>
+                            <td><p class="mt-3">SBI</p></td>
+                            <td><p class="mt-3 text-success">348</p></td>
+                            <td><p class="mt-3 text-success">1.09 %</p></td>
+                        </tr>
+                        <tr style="height: 75px;">
+                            <th scope="row"><p class="mt-3">3</p></th>
+                            <td><p class="mt-3">TCS</p></td>
+                            <td><p class="mt-3 text-danger">248</p></td>
+                            <td><p class="mt-3 text-danger">2.05 %</p></td>
+                        </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% endblock watchlist %}
+
+    <style>
+        /*.ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }*/
+    </style>
+
+    <script>
+        $(function () {
+            var availableTags = [
+                {% for company in companies_bse %}
+                    "{{ company.company_name }}",
+                {% endfor %}
+            ];
+            $("#tags").autocomplete({
+                source: availableTags,
+                //autoFocus: true,
+            });
+        });
+    </script>
+
+
+
+
+
+{% endblock %}

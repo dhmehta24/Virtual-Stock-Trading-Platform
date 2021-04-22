@@ -1,0 +1,168 @@
+{% extends "Dashboard.html" %}
+{% block content %}
+    <div class="container">
+        <a href="{{ data.get_absolute_url }}">
+            <button class="btn btn-lg btn-secondary text-center float-right rounded-circle"><i class="fa fa-plus"></i>
+            </button>
+        </a>
+        <div class="row mt-4">
+            <div class="jumbotron jumbotron-fluid col-md-6 bg-transparent">
+                <div class="container">
+                    <h3 class="display-5">{{ data.company_name }}</h3>
+                    <h1 class="display-3">{{ data.price }}</h1>
+                    <h4 class="display-5">{{ data.change }}({{ data.change_percentage }})</h4>
+
+                </div>
+            </div>
+            <div class="jumbotron jumbotron-fluid align-right col-md-6 bg-transparent">
+                <div class="container float-right mt-4 mr-3">
+                    <div class="float-right">
+                        <h4 class="display-5">{{ data.market }}</h4>
+                        <h4 class="display-5">Ticker : {{ data.company_ticker }}</h4>
+                        <h4 class="display-5">Time : {{ data.time }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="text-dark mb-3">Status</h4>
+        <div class="row my-2">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-dark">Open</h4>
+                        <h4 class="text-dark">{{ data.open }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-dark">High</h4>
+                        <h4 class="text-dark">{{ data.high }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-dark">Low</h4>
+                        <h4 class="text-dark">{{ data.low }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-dark">Close</h4>
+                        <h4 class="text-dark">{{ data.prev_close }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-5">
+            <div class="col-md-8">
+                <div class="card bg-white">
+                    <div class="card-body">
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                        <script>
+                            $.get('{% url "line_chart_json" %}', function (data) {
+                                var ctx = $("#myChart").get(0).getContext("2d");
+                                new Chart(ctx, {
+                                    type: 'line', data: data
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-block btn-success my-2" data-toggle="modal" data-target="#myModalbuy">Buy</button>
+                <button class="btn btn-block btn-warning my-2" data-toggle="modal" data-target="#myModalsell" {% if hold is None %} disabled = "disabled" {% endif %} >Sell</button>
+                <button class="btn btn-block btn-info my-2" data-toggle="modal" data-target="#myModalpredict">Predict</button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModalbuy" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Buy Stock</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{{ data.buy }}">
+                            {% csrf_token %}
+                            <input type="number" placeholder="Quantity" name="quantity">
+                            <input type="submit" value="Buy">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModalsell" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sell Stock</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% if hold is not None %}{% url 'sell_stock' hold.stock.company_ticker hold.stock.market hold.time %}{% endif %}">
+                            {% csrf_token %}
+                            <input type="number" placeholder="Quantity" name="quantity">
+                            <input type="submit" value="Sell">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="myModalpredict" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Predict Future Stock Price</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="result"></div>
+                        <button class = "btn btn-block btn-warning" onclick = "predict()">Predict</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+    function predict(){
+        $.ajax({
+            url: "{% url 'predict_stock' data.company_ticker data.market %}",
+            success: function(data){
+                console.log(data)
+            }
+        })
+    }
+
+    </script>
+
+{% endblock %}
