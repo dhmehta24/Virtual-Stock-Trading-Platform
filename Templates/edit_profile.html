@@ -1,0 +1,55 @@
+{% extends "dashboard.html" %}
+{% block content %}
+    <main>
+        <div class="container flex-grow-1 container-p-y my-5">
+            <div class="card">
+                <hr class="border-light m-0">
+                <div class="card-body">
+                    <h6 class="mt-4 mb-3">Personal info</h6>
+                    <form class="form need-validation" method="post" action="{% url 'update_profile' %}"
+                          novalidate>{% csrf_token %}
+                        <table class="table table-striped user-view-table m-0">
+                            <tbody>
+                            <tr>
+                                <td>Name:</td>
+                                <td><input type="text" name="name" id="name" class="form-control"
+                                           placeholder="{{ user.get_full_name }}" required></td>
+                            </tr>
+                            <tr>
+                                <td>E-mail:</td>
+                                <td><input type="email" name="email" id="email" class="form-control"
+                                           placeholder="{{ user.email }}"
+                                           required></td>
+                            </tr>
+                            <tr>
+                                <td>Birthdate:</td>
+                                <td><input type="text" name="dob" id="datepicker" class="form-control"
+                                           placeholder ="{{ user.investor.dob|date:'Y-m-d' }}"
+                                           required></td>
+                            </tr>
+                            <tr>
+                                <td>Phone:</td>
+                                <td><input type="tel" name="phone" id="phone" class="form-control"
+                                           placeholder="{{ user.investor.phone }}" required></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group align-items-center mx-auto text-center">
+                            <input type="submit" name="submit" class="btn btn-success btn-md" value="Update">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </main>
+            <script>
+                $(window).on('load',function () {
+                    $("#datepicker").datepicker({
+                        dateFormat: "yy-mm-dd",
+                        changeYear: true,
+                        changeMonth: true,
+                        yearRange: "1955:2021"
+                    });
+                });
+            </script>
+{% endblock %}

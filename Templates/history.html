@@ -1,0 +1,55 @@
+{% extends "dashboard.html" %}
+{% block content %}
+    <main>
+            <div class="container-fluid w-100 my-5">
+                <div class="row my-5">
+                    <div class="col-md-12">
+                        <div class="card border-left-primary card-single">
+                            <div class="card-header">
+                                <h6 class="text-secondary">Transaction History</h6>
+                            </div>
+                            <div class="card-body">
+                            {% if not data %}
+                                            <div class="alert alert-warning" role="alert">
+                                                <i class="fa fa-warning"></i>&nbsp;No Transactions Found! Please Buy some
+                                                shares first ! :/
+                                            </div>
+                                        {% else %}
+                                <table class="table table-hover" id="holdings">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Stock Name</th>
+                                                <th>Stock Ticker</th>
+                                                <th>Bought Price</th>
+                                                <th>Sold Price</th>
+                                                <th>Quantity</th>
+                                                <th>Transaction</th>
+                                                <th>Gain</th>
+                                                <th>Date & Time</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for i in data %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ i.stock.company_name }}</td>
+                                                <td>{{ i.stock.company_ticker }}</td>
+                                                <td>{{ i.bought_price }}</td>
+                                                <td>{{ i.sold_price }}</td>
+                                                <td>{{ i.quantity }}</td>
+                                                <td>{{ i.t_type }}</td>
+                                                <td>{{ i.gain | floatformat:2 }}</td>
+                                                <td>{{ i.datetime }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+{% endblock %}

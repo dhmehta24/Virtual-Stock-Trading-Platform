@@ -1,81 +1,87 @@
-{% extends "Dashboard.html" %}
+{% extends "dashboard.html" %}
 {% block content %}
-
-    <div class="container bootdey flex-grow-1 container-p-y my-5">
-        <div class="card mb-4 neumorph">
-            <div class="card-body">
-                <div class = "row m-3 mb-3">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""
-                     class="d-block ui-w-100 rounded-circle" height="180px" width="180px">
-                <div class="media-body ml-4">
-                    <h4 class="font-weight-bold mb-0"> {{ user.get_full_name }} <span class="text-muted font-weight-normal"></span>
-                    </h4>
-                    <div class="text-muted my-2 disply-5">Current Balance: Rs. {{ data.balance | floatformat:2 }} </div>
-                    <a href="">Edit</a>&nbsp;
-                    <a href="" class="btn btn-default btn-sm icon-btn"><i class="fa fa-mail"></i></a>
+    <main>
+    <!--<div class="justify-content-right mt-3 ml-4 mb-2">
+                    <h3 class="text-dark display-5">User Profile</h3>
+                </div>-->
+            <div class="container bootdey flex-grow-1 container-p-y my-5">
+                <div class="card mb-4 neumorph">
+                    <div class="card-body">
+                        <div class="row m-3 mb-3">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""
+                                 class="d-block ui-w-100 rounded-circle" height="180px" width="180px">
+                            <div class="media-body ml-4">
+                                <h4 class="font-weight-bold mb-0"> {{ user.investor.investor_name }} <span
+                                        class="text-muted font-weight-normal"></span>
+                                </h4>
+                                <div class="text-muted my-2 disply-5">Current Balance:
+                                    Rs. {{ data.balance | floatformat:2 }} </div>
+                                <a href="{% url 'edit_profile' %}">Edit</a>&nbsp;
+                            </div>
+                        </div>
+                        <br>
+                        <table class="table table-striped user-view-table">
+                            <tbody>
+                            <tr>
+                                <td>Total Transactions:</td>
+                                <td>{{ data.transactions }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Net Profit:</td>
+                                <td>{{ data.profit }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Net Loss:</td>
+                                <td>{{ data.loss }}</td>
+                            </tr>
+                            <tr>
+                                <td>Positive Transactions</td>
+                                <td>{{ data.p_transactions }}</td>
+                            </tr>
+                            <tr>
+                                <td>Negative Transactions:</td>
+                                <td>{{ data.n_transactions }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr class="border-light m-0">
                 </div>
+
+                <div class="card neumorph">
+                    <hr class="border-light m-0">
+                    <div class="card-body">
+
+                        <h6 class="mt-4 mb-3">Personal info</h6>
+
+                        <table class="table table-striped user-view-table m-0">
+                            <tbody>
+                            <tr>
+                                <td>Name:</td>
+                                <td>{{ user.investor.investor_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>E-mail:</td>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Birthday:</td>
+                                <td>{{ user.investor.dob }}</td>
+                            </tr>
+                            <tr>
+                                <td>Country:</td>
+                                <td>India</td>
+                            </tr>
+                            <tr>
+                                <td>Phone:</td>
+                                <td>{{ user.investor.phone }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-striped user-view-table">
-                    <tbody>
-                    <tr>
-                        <td>Total Transactions:</td>
-                        <td>{{ data.transactions }}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Net Profit:</td>
-                        <td>{{ data.profit }}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Net Loss:</td>
-                        <td>{{ data.loss }}</td>
-                    </tr>
-                    <tr>
-                        <td>Positive Transactions</td>
-                        <td>{{ data.p_transactions }}</td>
-                    </tr>
-                    <tr>
-                        <td>Negative Transactions:</td>
-                        <td>{{ data.n_transactions }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+
             </div>
-            <hr class="border-light m-0">
-        </div>
-
-        <div class="card neumorph">
-            <hr class="border-light m-0">
-            <div class="card-body">
-
-                <h6 class="mt-4 mb-3">Personal info</h6>
-
-                <table class="table table-striped user-view-table m-0">
-                    <tbody>
-                    <tr>
-                        <td>Name:</td>
-                        <td>{{ user.get_full_name }}</td>
-                    </tr>
-                    <tr>
-                        <td>E-mail:</td>
-                        <td>{{ user.email }}</td>
-                    </tr>
-                    <tr>
-                        <td>Birthday:</td>
-                        <td>{{ user.dob }}</td>
-                    </tr>
-                    <tr>
-                        <td>Country:</td>
-                        <td>India</td>
-                    </tr>
-                    <tr>
-                        <td>Phone:</td>
-                        <td>{{ user.phone }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
+        </main>
 
 {% endblock %}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+            integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+          integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+          crossorigin="anonymous"/>
+</head>
+<body>
+<style>
+    .card-single{
+        background: #fff;
+        border-radius: 7px;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    }
+</style>
+<main>
+    <!--<div class="justify-content-right mt-3 ml-4 mb-2">
+                    <h3 class="text-dark display-5">User Profile</h3>
+                </div>-->
+            <div class="container">
+        <div class="container">
+            <div class="row my-5">
+                <div class="card my-auto w-100 my-5 neumorph card-single">
+                    <div class="card-header text-center">
+                        <h4 id="title">Login</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="login-form" class="form" action="accounts/login" method="post">
+                            {% csrf_token %}
+                            <div class="form-group my-4">
+                                <label for="username" class="text">Username:</label><br>
+                                <input type="text" name="username" id="username" class="form-control">
+                            </div>
+                            <div class="form-group my-4">
+                                <label for="password" class="text">Password:</label><br>
+                                <input type="password" name="password" id="password" class="form-control">
+                            </div>
+                            <div class="form-group align-items-center mx-auto mt-2 mb-4 text-center">
+                                <label for="remember-me" class="text"><span>Keep Me Logged In</span> <span><input
+                                        id="remember-me" name="remember-me" type="checkbox"></span></label><br>
+
+                            </div>
+                            <div class="form-group my-2 text-center">
+                                <input type="submit" name="submit" class="btn btn-info" value="Log In">
+                                <hr>
+                                <a href="{% provider_login_url "google"%}"
+                                   class="btn btn-block btn-social btn-google"
+                                   style="background-color:#3b5998;text-align:center">
+                                    <span class="fa fa-google"></span>
+                                    Sign in with Google
+                                </a>
+                                <!--<button class="btn btn-block btn-danger"><i class="fa fa-google"></i> Login with Google
+                                </button>-->
+                                <!--<button class = "btn btn-block btn-primary"><i class = "fa fa-facebook"></i> Login with Facebook</button>-->
+                                <a href="{% provider_login_url "facebook" method="js_sdk" %}"
+                                   class="btn btn-block btn-social btn-facebook"
+                                   style="background-color:#3b5998;text-align:center">
+                                    <span class="fa fa-facebook"></span>
+                                    Sign in with Facebook
+                                </a>
+                            </div>
+                            <div id="register-link" class="text-center mt-4">
+                                <a class="text-dark" id="register">Dont Have an Account ? Register Here</a>
+                            </div>
+                        </form>
+
+                        <form id="signup-form" class="form" action="accounts/register" method="post"
+                              style="display:none">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="name" class="text">Full Name</label><br>
+                                <input type="text" name="name" id="name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="text">E-Mail</label><br>
+                                <input type="email" name="email" id="email" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="text">Phone No</label><br>
+                                <input type="tel" name="phone" id="phone" class="form-control">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="gender">Gender</label>
+                                    <select id="gender" name="gender" class="form-control">
+                                        <option selected>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="name">DOB</label><br>
+                                            <input type="text" name="day" id="name" class="form-control"
+                                                   placeholder="Day">
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <label for="name"></label><br>
+                                            <input type="text" name="month" id="name" class="form-control"
+                                                   placeholder="Month">
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <label for="name"></label><br>
+                                            <input type="text" name="year" id="name" class="form-control"
+                                                   placeholder="Year">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="text">Password:</label><br>
+                                <input type="password" name="password" id="password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="cpassword" class="text">Confirm Password:</label><br>
+                                <input type="password" name="cpassword" id="cpassword" class="form-control">
+                            </div>
+                            <div class="form-group align-items-center mx-auto text-center">
+                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Sign Up">
+                            </div>
+                            <div id="register-link" class="text-center">
+                                <a class="text-dark" id="login">Already Have an Account ? Log In</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#register").click(function () {
+            $("#login-form").hide();
+            $("#signup-form").show();
+            $("#title").text("Register");
+        })
+
+        $("#login").click(function () {
+            $("#signup-form").hide();
+            $("#login-form").show();
+            $("#title").text("Login");
+
+        })
+
+
+    </script>
+        </main>
+
+</body>
+</html>

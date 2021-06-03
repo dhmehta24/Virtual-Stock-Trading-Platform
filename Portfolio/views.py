@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse,JsonResponse
 # from .models import User
 from django.contrib.auth.models import User
@@ -20,6 +20,7 @@ from celery import shared_task
 from celery.decorators import periodic_task
 import requests
 import json
+from django.db.models import Q
 
 
 # import dummy_predi
@@ -50,8 +51,6 @@ def watchlist(request):
     data_bse = Company_Names_BSE.objects.all()
     data_nse = Company_Names_NSE.objects.all()
 
-    # Watchlist.objects.create(user= request.user, stock = Daily_Realtime_Price.objects.last())
-
     stock = Watchlist.objects.filter(user=request.user)
 
     for i in stock:
@@ -68,13 +67,8 @@ def share_info(request, slug=None):
 def login(request):
     return render(request, "login-signup.html")
 
-
-"""def share_info(request,slug,share):
-    share = slugify(slug)
-    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={}.BSE&outputsize=full&apikey=KAGKGXSCA99CAJKQ'.format(share.upper())
-    data = response.json()
-    return render(request,"shares_info.html")"""
-
+def edit_profile(request):
+    return render(request,"edit_profile.html")
 
 def login_save(request):
     if request.method == "POST":
@@ -113,7 +107,7 @@ def display_data(request, ticker, market, time = None):
     else:
         data = None
 
-    watch = Watchlist.objects.filter(user = request.user)
+    watch = Watchlist.objects.filter(user = request.user, stock__company_ticker=ticker, stock__market=market).last()
     if time:
         hold = Holdings.objects.get(investor=request.user, stock__company_ticker=ticker, stock__market=market, time=time)
     else:
@@ -132,8 +126,16 @@ def add_to_watchlist(request, ticker, market):
 
     return redirect("/watchlist")
 
+def remove_from_watchlist(request, ticker, market):
+    data = Watchlist.objects.get(stock__company_ticker=ticker, stock__market=market)
 
-@login_required
+    # q = Watchlist.objects.get(user = request.user, stock = data.company_ticker)
+
+    data.delete()
+
+    return redirect("/watchlist")
+
+
 def buy_stock(request, ticker, market):
 
     if request.method == "POST":
@@ -149,7 +151,7 @@ def buy_stock(request, ticker, market):
 
     if (data.price * int(qty)) > status.balance:
         messages.error(request,"You dont have enough money, you can buy {} shares instead".format(round(status.balance / data.price)))
-        return HttpResponse('')
+        return redirect(reverse("stock_info", args=[ticker, market]))
     else:
         status.balance = status.balance - (data.price * int(qty))
 
@@ -215,19 +217,13 @@ def sell_stock(request, ticker, market, time):
 
         messages.info(request, "Sold {} stocks of {}".format(qty, hold.stock.company_name))
 
+        return redirect("/")
+
     else:
         messages.error(request, "You have only {} stocks to sell".format(hold.quantity))
+        return  redirect("/")
+        #return reverse('stock_info_sell',args=[ticker, market, time])
     # Investor_Staus.objects.create(investor=request.user )
-
-    return redirect("/")
-
-
-"""def add_data_to_detail(request):
-
-    data = pandas.read_csv("MCAP31032021.csv")
-
-
-    Company_Names.objects.create(company_name=data['Comapany Name'], company_ticker=data.Symbol, )"""
 
 
 def update_data(ticker, market):
@@ -238,13 +234,7 @@ def update_data(ticker, market):
         data = n.get_quote(ticker)
         # format_date = '%d-%M-%Y'
         e = Daily_Realtime_Price.objects.filter(company_name=data['companyName'], company_ticker=data['symbol'],market='NSE').last()
-        """, open = data['open'], high = data['dayHigh'],
-        low = data['dayLow'], close = data['closePrice'],
-        price = data['lastPrice'], volume = data['totalTradedVolume'],
-        latest_trading_day = data['secDate'],
-        prev_close = data['previousClose'], change = data['change'],
-        change_percentage = data['pChange']"""
-
+    
         if e is not None:
 
             e.open = data['open']
@@ -280,12 +270,7 @@ def update_data(ticker, market):
         data = b.getQuote(ticker)
         e = Daily_Realtime_Price.objects.filter(company_name=data['companyName'],
                                                       company_ticker=data['scripCode'], market='BSE').last()
-        """open=data['previousOpen'], high=data['dayHigh'],
-                                                      low=data['dayLow'], close=data['previousClose'],
-                                                      price=data['currentValue'], volume=0,
-                                                      latest_trading_day=data['updatedOn'],
-                                                      prev_close=data['previousClose'], change=data['change'],
-                                                      change_percentage=data['pChange']"""
+        
         if e is not None:
 
             e.open = data['previousOpen']
@@ -303,7 +288,7 @@ def update_data(ticker, market):
 
         else:
 
-            e = Daily_Realtime_Price.objects.create(company_name=data['companyName'], company_ticker=data['scripCode'],market='NSE', open=data['previousOpen'], high=data['dayHigh'],
+            e = Daily_Realtime_Price.objects.create(company_name=data['companyName'], company_ticker=data['scripCode'],market='BSE', open=data['previousOpen'], high=data['dayHigh'],
                                                       low=data['dayLow'], close=data['previousClose'],
                                                       price=data['currentValue'], volume=0,
                                                       latest_trading_day=data['updatedOn'],
@@ -339,24 +324,9 @@ def add_to_db():
 def update_real_time():
     add_to_db.delay()
 
-class LineChartJSONView(BaseLineChartView):
-    def get_labels(self):
-    #Return 7 labels for the x-axis.
-        return ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
 
-    def get_providers(self):
-        #Return names of datasets.
-        return ["MRF"]
-
-    def get_data(self):
-        #Return 3 datasets to plot.
-        today = date.today()
-        data = yf.Ticker("MRF").history(start=date(today.year - 8, today.month, today.day), end=today)
-        df = pd.DataFrame(data)
-        return df
-
-line_chart = TemplateView.as_view(template_name='share-info.html')
-line_chart_json = LineChartJSONView.as_view()
+def display_chart(request, ticker):
+    pass
 
 
 def search_stocks(request):
@@ -367,9 +337,9 @@ def search_stocks(request):
         print(market)
 
         if market == 'NSE':
-            result = Company_Names_NSE.objects.filter(company_name__icontains=keyword)
+            result = Company_Names_NSE.objects.filter(Q(company_name__icontains=keyword) | Q(company_code_nse__icontains=keyword))
         else:
-            result = Company_Names_BSE.objects.filter(company_name__contains=keyword)
+            result = Company_Names_BSE.objects.filter(Q(company_name__icontains=keyword) | Q(company_code_bse__icontains=keyword))
 
         return render(request,"search-results.html",{"data":result,"market":market})
 
@@ -388,3 +358,26 @@ def predict(request, ticker, market):
         }
 
         return JsonResponse(res)
+
+
+def show_history(request):
+    h = History.objects.filter(investor=request.user).order_by('-datetime')
+
+    return render(request,"history.html",{"data":h})
+
+def reset_data(request):
+    Holdings.objects.filter(investor=request.user).delete()
+    Daily_Realtime_Price.objects.all().delete()
+    History.objects.filter(investor=request.user).delete()
+    Watchlist.objects.filter(user=request.user).delete()
+    i = Investor_Staus.objects.get(investor=request.user)
+    i.balance = 500000
+    i.transactions = 0
+    i.profit = 0
+    i.loss = 0
+    i.p_transactions = 0
+    i.n_transactions = 0
+    i.save()
+    messages.info(request,"Account Has Been Reset. All Records Deleted.")
+
+    return redirect("/")

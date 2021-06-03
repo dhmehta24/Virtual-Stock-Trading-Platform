@@ -1,73 +1,291 @@
+{% load static %}
 {% load socialaccount %}
 {% providers_media_js %}
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <title></title>
-    <!-- <link rel="stylesheet" type="text/css" href="MP.css"> -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
-            integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
             crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+          integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="login.css">
+
 </head>
 <style>
-    .neumorph {
-        background: #f8f9fa !important;
-        box-shadow: 5px 5px 10px #ac75d9,
-        -5px -5px 10px #e89fff !important;
+    @import url('https://fonts.googleapis.com/css?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
     }
 
-    .main-bg {
-        background-color: #ca8aff !important;
+    body {
+        width: 100%;
+        height: 100%;
+        background: #E2F1FF;
+    }
+
+    .card-single {
+        background: #fff;
+        border-radius: 7px;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-cards {
+        width: auto;
+        height: auto;
+        margin: 150px;
+        background: #fff;
+    }
+
+    section {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+    }
+
+    section .imgBx {
+        position: relative;
+        width: 30%;
+        height: 100%;
+    }
+
+    section .imgBx::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(225deg, #e91e63, #027581);
+        z-index: 1;
+        mix-blend-mode: screen;
+    }
+
+    section .imgBx img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    section .contentBx {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70%;
+        height: 100%;
+    }
+
+    section .contentBx .formBx {
+        width: 50%;
+    }
+
+    section .contentBx .formBx h2 {
+        color: #607d8b;
+        font-weight: 600;
+        font-size: 1.5em;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        border-bottom: 4px solid #027581;
+        display: inline-block;
+        letter-spacing: 1px;
+    }
+
+    section .contentBx .formBx .inputBx {
+        margin-bottom: 20px;
+    }
+
+    section .contentBx .formBx .inputBx span {
+        font-size: 15px;
+        margin-bottom: 5px;
+        display: inline-block;
+        color: #607d8b;
+        font-weight: 300;
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+
+    section .contentBx .formBx .inputBx input {
+        width: 100%;
+        padding: 10px 20px;
+        outline: none;
+        font-weight: 400;
+        border: 1px solid #607d8b;
+        font-size: 16px;
+        letter-spacing: 1px;
+        color: #607d8b;
+        background: transparent;
+        border-radius: 30px;
+    }
+
+    section .contentBx .formBx .inputBx input[type="submit"] {
+        background: #027581;
+        color: #fff;
+        outline: none;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    section .contentBx .formBx .inputBx input[type="submit"]:hover {
+        background: #f53677;
+    }
+
+    section .contentBx .formBx .remember {
+        margin-bottom: 10px;
+        color: #607d8b;
+        font-weight: 400;
+        font-size: 14px;
+    }
+
+    section .contentBx .formBx .inputBx p {
+        color: #607d8b;
+    }
+
+    section .contentBx .formBx .inputBx p a {
+        color: #027581;
+    }
+
+    section .contentBx .formBx h3 {
+        color: #607d8b;
+        text-align: center;
+        margin: 80px 0 10px;
+        font-weight: 500;
+    }
+
+    section .contentBx .formBx .sci {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    section .contentBx .formBx .sci li img {
+        list-style: none;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #027581;
+        border-radius: 50%;
+        margin: 0 7px;
+        transform: scale(0.5);
+        filter: invert(1);
+    }
+
+    section .contentBx .formBx .sci li {
+        list-style: none;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #027581;
+        border-radius: 50%;
+        margin: 0 7px;
+        cursor: pointer;
+    }
+
+    section .contentBx .formBx .sci li:hover {
+        background: #e91e63;
+    }
+
+    @media (max-width: 768px) {
+        section .imgBx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        section .contentBx {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        section .contentBx .formBx {
+            width: 100%;
+            padding: 40px;
+            background: rgb(255 255 255 / 90%);
+            margin: 50px;
+        }
+
+        section .contentBx .formBx h3 {
+            color: #607d8b;
+            text-align: center;
+            margin: 30px 0 10px;
+            font-weight: 500;
+        }
+
     }
 </style>
-<body class="main-bg">
-{% block content %}
+
+<body>
+<div class="for-alert" style="position: absolute;left: 0; top: 0;">
+    {% include "messages.html" %}
+</div>
+<main>
     <div class="container">
         <div class="container">
             <div class="row my-5">
-                <div class="card my-auto w-100 my-5 neumorph">
+                <div class="card my-auto w-100 my-5 neumorph card-single">
                     <div class="card-header text-center">
                         <h4 id="title">Login</h4>
                     </div>
                     <div class="card-body">
-                        <form id="login-form" class="form" action="accounts/login" method="post">
+                        <form id="login-form" class="form needs-validation" action="{% url 'login_user' %}" method="post" novalidate>
                             {% csrf_token %}
                             <div class="form-group my-4">
-                                <label for="username" class="text">Username:</label><br>
-                                <input type="text" name="username" id="username" class="form-control">
+                                <label for="username" class="text">E-Mail:</label><br>
+                                <input type="text" name="username" id="username" class="form-control" required>
                             </div>
                             <div class="form-group my-4">
                                 <label for="password" class="text">Password:</label><br>
-                                <input type="text" name="password" id="password" class="form-control">
+                                <input type="password" name="password" id="password" class="form-control" required>
                             </div>
                             <div class="form-group align-items-center mx-auto mt-2 mb-4 text-center">
-                                <label for="remember-me" class="text"><span>Keep Me Logged In</span> <span><input
+                                <label for="remember-me" class="text"><span>Keep Me Logged In</span> <span><input
                                         id="remember-me" name="remember-me" type="checkbox"></span></label><br>
 
                             </div>
                             <div class="form-group my-2 text-center">
                                 <input type="submit" name="submit" class="btn btn-info" value="Log In">
                                 <hr>
-                                <a href="{% provider_login_url "google"%}"
-                                   class="btn btn-block btn-social btn-google"
-                                   style="background-color:#3b5998;text-align:center">
+                                <a href="{% provider_login_url "google" %}"
+                                   class="btn btn-block btn-social btn-google text-light"
+                                   style="background-color:#DB4437;text-align:center">
                                     <span class="fa fa-google"></span>
                                     Sign in with Google
                                 </a>
-                                <!--<button class="btn btn-block btn-danger"><i class="fa fa-google"></i> Login with Google
-                                </button>-->
-                                <!--<button class = "btn btn-block btn-primary"><i class = "fa fa-facebook"></i> Login with Facebook</button>-->
                                 <a href="{% provider_login_url "facebook" method="js_sdk" %}"
-                                   class="btn btn-block btn-social btn-facebook"
+                                   class="btn btn-block btn-social btn-facebook text-light"
                                    style="background-color:#3b5998;text-align:center">
                                     <span class="fa fa-facebook"></span>
                                     Sign in with Facebook
@@ -78,37 +296,35 @@
                             </div>
                         </form>
 
-                        <form id="signup-form" class="form" action="accounts/register" method="post"
-                              style="display:none">
+                        <form id="signup-form" class="form needs-validation" action="{% url 'register_user' %}" method="post"
+                              style="display:none" novalidate>
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="name" class="text">Full Name</label><br>
-                                <input type="text" name="name" id="name" class="form-control">
+                                <input type="text" name="name" id="name" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="text">E-Mail</label><br>
-                                <input type="email" name="email" id="email" class="form-control">
+                                <input type="email" name="email" id="email" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="phone" class="text">Phone No</label><br>
-                                <input type="tel" name="phone" id="phone" class="form-control">
+                                <input type="tel" name="phone" id="phone" class="form-control" required>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="gender">Gender</label>
-                                    <select id="gender" name="gender" class="form-control">
+                                    <select id="gender" name="gender" class="form-control" required>
                                         <option selected>Male</option>
                                         <option>Female</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-8">
+                                <div class="form-group col-md-6">
                                     <div class="form-row">
-                                        <div class="col-md-4">
-                                            <label for="name">DOB</label><br>
-                                            <input type="text" name="day" id="name" class="form-control"
-                                                   placeholder="Day">
-                                        </div>
-                                        <div class="col-md-4 mt-2">
+                                        <label for="name">DOB</label><br>
+                                            <input type="text" name="date" id="datepicker" class="form-control"
+                                                   placeholder="Date" required>
+                                        <!--<div class="col-md-4 mt-2">
                                             <label for="name"></label><br>
                                             <input type="text" name="month" id="name" class="form-control"
                                                    placeholder="Month">
@@ -117,17 +333,17 @@
                                             <label for="name"></label><br>
                                             <input type="text" name="year" id="name" class="form-control"
                                                    placeholder="Year">
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="password" class="text">Password:</label><br>
-                                <input type="password" name="password" id="password" class="form-control">
+                                <input type="password" name="password" id="password" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="cpassword" class="text">Confirm Password:</label><br>
-                                <input type="password" name="cpassword" id="cpassword" class="form-control">
+                                <input type="password" name="cpassword" id="cpassword" class="form-control" required>
                             </div>
                             <div class="form-group align-items-center mx-auto text-center">
                                 <input type="submit" name="submit" class="btn btn-info btn-md" value="Sign Up">
@@ -158,46 +374,55 @@
 
 
     </script>
+</main>
 
+<script>
+    $("#register").click(function () {
+        $("#login-form").hide();
+        $("#signup-form").show();
+        $("#title").text("Register");
+    })
 
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '165002465384324',
-                cookie: true,
-                xfbml: true,
-                version: '{api-version}'
-            });
+    $("#login").click(function () {
+        $("#signup-form").hide();
+        $("#login-form").show();
+        $("#title").text("Login");
 
-            FB.AppEvents.logPageView();
+    })
 
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-
-        FB.getLoginStatus(function (response) {
-            statusChangeCallback(response);
+    $(function () {
+        $("#datepicker").datepicker({
+            dateFormat:"yy-mm-dd",
+            changeYear:true,
+            changeMonth:true,
+            yearRange:"1955:2021"
         });
+    });
 
 
-        function checkLoginState() {
-            FB.getLoginStatus(function (response) {
-                statusChangeCallback(response);
-            });
+</script>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
         }
-    </script>
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
 
-
-{% endblock %}
 
 </body>
+</html>

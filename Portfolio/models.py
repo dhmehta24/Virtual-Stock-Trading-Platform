@@ -57,7 +57,7 @@ class Daily_Realtime_Price(models.Model):
     close = models.FloatField(null = True,default=0)
     price = models.FloatField(default=0)
     volume = models.FloatField(default=0)
-    latest_trading_day = models.CharField(max_length=20,default=datetime.datetime.now())
+    latest_trading_day = models.CharField(max_length=20,default=datetime.datetime.now(), null = True)
     prev_close = models.FloatField(default=0)
     change  = models.FloatField(null=True,default=0)
     change_percentage = models.TextField(null = True)
@@ -68,6 +68,13 @@ class Daily_Realtime_Price(models.Model):
 
     def get_absolute_url(self):
         return f"/{self.company_ticker}/{self.market}"
+
+    def add_to_wtl(self):
+        return f"addw/{self.company_ticker}/{self.market}"
+
+    def rm_frm_wtl(self):
+        return f"rmw/{self.company_ticker}/{self.market}"
+
 
     def buy(self):
         return f"/buy/{ self.company_ticker }/{ self.market }"
@@ -110,6 +117,8 @@ class Holdings(models.Model):
         time_slug = self.get_time()
         return f"sell/{ self.stock.company_ticker }/{ self.stock.market }/{ self.get_time() }"
 
+    def value(self):
+        return self.ltp * self.quantity
     def gain(self):
         return self.ltp - self.bought_price
 

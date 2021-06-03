@@ -14,7 +14,6 @@
                             <th scope="col">#</th>
                             <th scope="col">Stock Name</th>
                             <th scope="col">Stock Ticker</th>
-                            <th scope="col">Value</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -23,7 +22,6 @@
                             <th scope="row"><p class="mt-3">{{ forloop.counter }}</p></th>
                             <td><p class="mt-3"><a href="{{ i.get_absolute_url }}">{{ i.company_name }}</a></p></td>
                             <td><p class="mt-3">{%  if market == 'NSE' %}{{ i.company_code_nse }}{%  else %}{{ i.company_code_bse }}{% endif %}</p></td>
-                            <td><p class="mt-3 text-success">{{ i.price }}</p></td>
                         </tr>
                         {% endfor %}
                         <!--<tr style="height: 75px;">

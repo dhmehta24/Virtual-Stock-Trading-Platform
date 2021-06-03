@@ -1,0 +1,764 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <!-- <link rel="stylesheet" type="text/css" href="MP.css"> -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+            integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+          integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    :root {
+        /*--main-color: #027581;
+        --color-dark: #1D2231;*/
+        --main-color: #2367B1;
+        --color-dark: #1D2231;
+        --text-grey: #E2F1FF;
+    }
+
+    * {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        list-style-type: none;
+        box-sizing: border-box;
+    }
+
+    /* .neumorph {
+        background: #f8f9fa !important;
+        box-shadow: 5px 5px 10px #027581,
+        -5px -5px 10px #e89fff !important;
+    } */
+    html, body {
+        height: 100%;
+    }
+
+    #sidebar-toggle {
+        display: none;
+    }
+
+    .sidebar {
+        height: 100%;
+        width: 240px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 100;
+        background: var(--main-color);
+        color: #fff;
+        overflow-y: auto;
+        transition: width 500ms;
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 60px;
+        padding: 0 1rem;
+    }
+
+    .sidebar-menu {
+        padding: 1rem;
+    }
+
+    .sidebar li {
+        margin: 3rem 0;
+        border: 1px;
+        padding: 0.5rem;
+    }
+
+    .sidebar li:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar a {
+        color: #fff;
+        font-size: .8rem;
+        text-decoration: none;
+    }
+
+    .sidebar a span:last-child {
+        padding-left: .6rem;
+    }
+
+    #sidebar-toggle:checked ~ .sidebar {
+        width: 60px;
+    }
+
+    #sidebar-toggle:checked ~ .sidebar .sidebar-header h3 span,
+    #sidebar-toggle:checked ~ .sidebar li span:last-child {
+        display: none;
+    }
+
+    #sidebar-toggle:checked ~ .sidebar .sidebar-header,
+    #sidebar-toggle:checked ~ .sidebar li {
+        display: flex;
+        justify-content: center;
+    }
+
+    #sidebar-toggle:checked ~ .main-content {
+        margin-left: 60px;
+    }
+
+    #sidebar-toggle:checked ~ .main-content header {
+        left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .main-content {
+        position: relative;
+        margin-left: 240px;
+        transition: margin-left 500ms;
+    }
+
+    header {
+        position: fixed;
+        left: 240px;
+        top: 0;
+        z-index: 100;
+        width: calc(100% - 240px);
+        background: #fff;
+        height: 60px;
+        padding: 0rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        transition: left 500ms;
+    }
+
+    h3 {
+        display: block;
+        font-size: 1.17em;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+
+    .search-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-wrapper input {
+        border: 0;
+        outline: 0;
+        padding: 1rem;
+        height: 38px;
+    }
+
+    .social-icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .social-icons span,
+    .social-icons div {
+        margin-left: 1.2rem;
+    }
+
+    .social-icons div {
+        height: 38px;
+        width: 38px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-image: url(img/1.jpg);
+        border-radius: 50%;
+    }
+
+    main {
+        margin-top: 60px;
+        background: #E2F1FF;
+        min-height: 100vh;
+        height: 100%;
+        padding: 1rem 3rem;
+    }
+
+    .dash-title {
+        color: var(--color-dark);
+        margin-bottom: 1rem;
+    }
+
+    .dash-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 3rem;
+    }
+
+    .card-single {
+        background: #fff;
+        border-radius: 7px;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /*.card-body {
+        padding: 1.3rem 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-body span {
+        font-size: 1.5rem;
+        color: #777;
+        padding-right: 1.4rem;
+    }
+
+    .card-body h5 {
+        color: var(--text-grey);
+        font-size: 1rem;
+    }
+
+    .card-body h4 {
+        color: var(--color-dark);
+        font-size: 1.1rem;
+        margin-top: .2rem;
+    }
+
+    .card-footer {
+        padding: .2rem 1rem;
+        background: #f9fafc;
+    }
+
+    .card-footer a {
+        color: var(--main-color);
+    }*/
+
+    .recent {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .activity-grid {
+        width: 1580px;
+        display: grid;
+        grid-template-columns: 75% 25%;
+        grid-column-gap: 1.5rem;
+    }
+
+    .activity-card,
+    .summary-card,
+    .bday-card {
+        background: #fff;
+        border-radius: 7px;
+    }
+
+    .activity-card h3 {
+        color: var(--text-grey);
+        margin: 1rem;
+    }
+
+    .activity-card table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .activity-card thead {
+        background: #efefef;
+        text-align: left;
+    }
+
+    th, td {
+        font-size: .9rem;
+        padding: 1rem 1rem;
+        color: var(--color-dark);
+    }
+
+    td {
+        font-size: .8rem;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #f9fafc;
+    }
+
+    .badge {
+        padding: .2rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: .7rem;
+    }
+
+    .badge.success {
+        background: #DEF7EC;
+        color: var(--main-color);
+    }
+
+    .badge.warning {
+        background: #F0F6B2;
+        color: orange;
+    }
+
+    .td-team {
+        display: flex;
+        align-items: center;
+    }
+
+    /*
+    .img-1,
+    .img-2,
+    .img-3 {
+        height: 38px;
+        width: 38px;
+        border-radius: 50%;
+        margin-left: -15px;
+        border: 3px solid #efefef;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .img-1 {
+        background-image: url(img/1.jpg);
+    }
+
+    .img-2 {
+        background-image: url(img/2.jpg);
+    }
+
+    .img-3 {
+        background-image: url(img/3.jpeg);
+    }
+
+    .summary-card {
+        margin-bottom: 1.5rem;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+    }
+
+    .summary-single {
+        padding: .5rem 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .summary-single span {
+        font-size: 1.5rem;
+        color: #777;
+        padding-right: 1rem;
+    }
+
+    .summary-single h5 {
+        color: var(--main-color);
+        font-size: 1.1rem;
+        margin-bottom: 0rem !important;
+    }
+
+    .summary-single small {
+        font-weight: 700;
+        color: var(--text-grey);
+    }
+
+    .bday-flex {
+        display: flex;
+        align-items: center;
+        margin-bottom: .3rem;
+    }
+
+    .bday-card {
+        padding: 1rem;
+    }
+
+    .bday-img {
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        border: 3px solid #efefef;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-image: url(img/3.jpeg);
+        margin-right: .7rem;
+    } */
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-center button {
+        background: var(--main-color);
+        color: #fff;
+        border: 1px solid var(--main-color);
+        border-radius: 4px;
+        padding: .4rem 1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    @media only screen and (max-width: 1200px) {
+        .sidebar {
+            width: 60px;
+            z-index: 150;
+        }
+
+        .sidebar .sidebar-header h3 span,
+        .sidebar li span:last-child {
+            display: none;
+        }
+
+        .sidebar .sidebar-header,
+        .sidebar li {
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-content {
+            margin-left: 60px;
+        }
+
+        .main-content header {
+            left: 60px;
+            width: calc(100% - 60px);
+        }
+
+        #sidebar-toggle:checked ~ .sidebar {
+            width: 240px;
+        }
+
+        #sidebar-toggle:checked ~ .sidebar .sidebar-header h3 span,
+        #sidebar-toggle:checked ~ .sidebar li span:last-child {
+            display: inline;
+        }
+
+        #sidebar-toggle:checked ~ .sidebar .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #sidebar-toggle:checked ~ .sidebar li {
+            display: block;
+        }
+
+        #sidebar-toggle:checked ~ .main-content {
+            margin-left: 60px;
+        }
+
+        #sidebar-toggle:checked ~ .main-content header {
+            left: 60px;
+        }
+    }
+
+    @media only screen and (max-width: 860px) {
+        .dash-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .card-single {
+            margin-bottom: 1rem;
+        }
+
+        .activity-grid {
+            display: block;
+        }
+
+        .summary {
+            margin-top: 1.5rem;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .dash-cards {
+            grid-template-columns: 100%;
+        }
+    }
+
+    @media only screen and (max-width: 450px) {
+        main {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+
+
+</style>
+
+<body>
+<div class="for-alert" style="position: absolute;left: 0; top: 0;">
+    {% include "messages.html" %}
+</div>
+<input type="checkbox" id="sidebar-toggle" checked>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h3 class="brand">
+            <span class="ti-unlink"></span>
+            <span>PredxInvest</span>
+        </h3>
+        <label for="sidebar-toggle" class="ti-menu-alt"></label>
+    </div>
+
+    <div class="sidebar-menu">
+        <ul>
+            <li>
+                <a href="{% url "home" %}">
+                    <span class="fa fa-briefcase"></span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <a href="{% url 'user_profile' %}">
+                <li>
+                    <span class="fa fa-user"></span>
+                    <span>Profile</span>
+                </li>
+            </a>
+            <li>
+                <a href="{% url 'watchlist' %}">
+                    <span class="fa fa-list-ul"></span>
+                    <span>Watchlist</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'show_history' %}">
+                    <span class="fa fa-history"></span>
+                    <span>History</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="main-content">
+    <header>
+        <div class="title">
+            <h4 id="title">{% if request.path == '/' %}Dashboard{% elif  request.path == '/profile' %}User
+                Profile{% elif  request.path == '/watchlist' %}Watchlist{% elif  request.path == '/history' %}
+                Transaction History{% elif  request.path == '/info' %}Stock Info{% else %}{% endif %}</h4>
+        </div>
+
+        <div class="dropdown mr-3 float-right ml-auto">
+            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""
+                 class="d-block ui-w-100 rounded-circle dropdown-toggle" height="30px" width="28px"
+                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
+                <a class="dropdown-item" href="{% url 'reset_user_data' %}">Reset Data</a>
+                <a class="dropdown-item" href="{% url 'logout_user' %}">Logout</a>
+            </div>
+        </div>
+    </header>
+    {% block content %}
+        <main>
+            <div class="container-fluid">
+                <!--<div class="justify-content-right mt-3 ml-2 mb-2">
+                    <h3 class="text-dark display-5">Dashboard</h3>
+                </div>-->
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="card py-2 mt-2 card-single">
+                            <div class="card-body">
+                                <h5>Balance</h5>
+                                <p class="lead"><i class="fa fa-money"></i>&nbsp;{{ profile.balance | floatformat:2 }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card py-2 mt-2 card-single">
+                            <div class="card-body">
+                                <h5>Transactions</h5>
+                                <p class="lead"><i class="fa fa-exchange"></i>&nbsp;{{ profile.transactions }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card py-2 mt-2 card-single">
+                            <div class="card-body">
+                                <h5>Gained Profit</h5>
+                                <p class="lead"><i class="fa fa-inr"></i>&nbsp;{{ profile.profit | floatformat:2 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-5">
+                    <div class="col-md-12">
+                        <div class="card border-left-primary card-single">
+                            <div class="card-header">
+                                <h6 class="text-secondary">Current Portfolio</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="card border-1 w-100">
+                                    <div class="card-body pb-0">
+                                        {% if not data %}
+                                            <div class="alert alert-warning" role="alert">
+                                                <i class="fa fa-warning"></i>&nbsp;No Holdings Found! Please Buy some
+                                                shares first ! :/
+                                            </div>
+                                        {% else %}
+                                            <table class="table table-hover" id="holdings">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Stock Name</th>
+                                                    <th scope="col">Stock Ticker</th>
+                                                    <th scope="col">Market</th>
+                                                    <th scope="col">Bought Price</th>
+                                                    <th scope="col">Recent Price(LTP)</th>
+                                                    <th scope="col">Qty</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for i in data %}
+                                                    <tr style="height: 75px;">
+                                                        <th scope="row"><p class="mt-3">{{ forloop.counter }}</p></th>
+                                                        <td><a href="{{ i.get_detailed_url }}"><p
+                                                                class="mt-3">{{ i.stock.company_name }}</p></a></td>
+                                                        <td><p class="mt-3">{{ i.stock.company_ticker }}</p></td>
+                                                        <td><p class="mt-3">{{ i.stock.market }}</p></td>
+                                                        <td><p class="mt-3">{{ i.bought_price | floatformat:2 }}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="mt-3 {% if i.bought_price < i.ltp %}text-success{% else %}text-danger{% endif %}">{{ i.ltp | floatformat:2 }}
+                                                                ({{ i.gain | floatformat:2 }})</p></td>
+                                                        <td><p class="mt-3">{{ i.quantity }}</p></td>
+                                                        <td>
+                                                            <p class="mt-3 {% if i.bought_price < i.ltp %}text-success{% else %}text-danger{% endif %}">{{ i.value }}</p>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        </div>
+        <script>
+
+            var interval = 0;
+
+            function start() {
+                setTimeout(function () {
+                    ajax_function();
+                    interval = 60;
+                    setInterval(function () {
+                        ajax_function();
+                    }, interval * 1000);
+                }, interval * 1000);
+            }
+
+            function ajax_function() {
+                $.ajax({
+                    url: "{% url 'dashboard' %}",
+                    //context: document.body,
+                    success: function (result) {
+                        $('.main-bg').html(result);
+                    }
+                });
+            }
+
+            $(window).on('load', function () {
+                var time = new Date();
+                interval = 60 - time.getSeconds();
+                if (interval === 60)
+                    interval = 0;
+                start();
+            });
+
+            /*$.ajax({
+                type: "GET",
+                url: "{% url 'dashboard' %}",
+            success: function (data) {
+                $(".main-bg").html(data)
+            }
+        })*/
+
+            /*setInterval(function(){
+            }, 30 * 1000)*/
+
+
+            /*$(document).ready(function(){
+                setInterval(refresh, 60 * 1000)
+            })*/
+        </script>
+        <script>
+            function dop() {
+                toastr['success']('Done', 'Finished')
+            }
+        </script>
+    {% endblock %}
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+</body>

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'background_task',
     'chartjs',
     'django_celery_beat',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -95,13 +96,19 @@ WSGI_APPLICATION = 'Major_Project.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default':{
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-
     }
 }
 
+''''default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'Trading_Platform_DB',
+        'USER': 'postgres',
+        'PASSWORD': 'dracarys',
+        'HOST': 'localhost',
+    }'''
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -138,6 +145,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR,'Static')
 
 #AUTH_USER_MODEL = 'core.User'
 
@@ -184,7 +193,7 @@ SITE_ID = 1
 
 #ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 
-KEEP_LOGGED_DURATION = 365
+KEEP_LOGGED_DURATION = 24*60*60*365
 
 TIME_ZONE = 'Asia/Kolkata'
 
@@ -205,11 +214,11 @@ CELERY_CACHE = 'django_cache'
 
 
 MESSAGE_TAGS = {
-        messages.DEBUG: 'alert-secondary',
-        messages.INFO: 'alert-info',
-        messages.SUCCESS: 'alert-success',
-        messages.WARNING: 'alert-warning',
-        messages.ERROR: 'alert-danger',
+        #messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'info',
+        messages.SUCCESS: 'success',
+        messages.WARNING: 'warning',
+        messages.ERROR: 'error',
  }
 
 """CELERY_BEAT_SCHEDULE = {
@@ -218,3 +227,8 @@ MESSAGE_TAGS = {
         "schedule":30.0,
     }
 }"""
+
+SESSION_COOKIE_AGE = 24*60*60*7
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
