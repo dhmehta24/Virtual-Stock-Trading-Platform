@@ -102,14 +102,6 @@ DATABASES = {
     }
 }
 
-''''default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'Trading_Platform_DB',
-        'USER': 'postgres',
-        'PASSWORD': 'dracarys',
-        'HOST': 'localhost',
-    }'''
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -231,4 +223,13 @@ MESSAGE_TAGS = {
 SESSION_COOKIE_AGE = 24*60*60*7
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+PROJECT_ROOT   =   os.path.join(os.path.abspath(__file__))
+
+#  Add configuration for static files storage using whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+import dj_database_url
+prod_db  =  dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(prod_db)
 
