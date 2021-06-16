@@ -26,15 +26,12 @@ google-auth-oauthlib==0.4.2
 google-pasta==0.2.0
 Google-Search-API==1.1.14
 graphviz==0.16
-h5py==2.10.0
-html5lib==1.1
 django-rest-framework==0.1.0
 django-storages==1.10.1
 django-timezone-field==4.1.2
 django-vitae==0.1.0
 django-widgets==0.1.16
 dynamic-django-forms==0.1.5
-entrypoints==0.3
 Django>=3.1.8
 django-heroku>=0.3.1
 djangorestframework>=3.12.2
