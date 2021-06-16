@@ -15,7 +15,6 @@ django-composer==0.0.5
 django-compressor==2.4
 django-crispy-forms==1.11.1
 django-extensions==3.1.3
-django-heroku==0.3.1
 django-infinite-scroll-pagination==1.2.0
 django-mysql==3.8.1
 django-redis==4.12.1
